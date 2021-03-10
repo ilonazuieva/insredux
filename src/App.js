@@ -1,25 +1,26 @@
-import logo from './logo.svg';
+import React from "react";
 import './App.css';
+import {connect} from 'react-redux'
 
-function App() {
+function App(props) {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <button onClick={props.addCard}>add card</button>
+      {props.cards.map(el=>
+          <div key={el._id}>
+            {el.name}
+          <button onClick={()=> props.deleteCard(el._id)}>delete</button>
+          </div>)}
     </div>
   );
 }
+const mapStateToProps =(state)=> ({
+  cards: state.cards
+})
+const mapDispatchToProps = (dispatch)=> ({
+  addCard: () => dispatch({type: 'ADD_CARD'}),
+  deleteCard: (cardId)=> dispatch({type: 'DELETE_CARD',payload:cardId})
+})
 
-export default App;
+export default connect(mapStateToProps,mapDispatchToProps ) (App);
